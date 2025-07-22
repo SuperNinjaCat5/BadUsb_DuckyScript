@@ -1,0 +1,13 @@
+REM Hello
+DEFAULT_DELAY 200
+
+REM Opens notepad
+GUI r
+DELAY 500
+
+STRING notepad
+ENTER
+DELAY 1000
+
+REM Type stuff
+STRING Hello, TEST
