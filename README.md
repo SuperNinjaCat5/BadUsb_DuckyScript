@@ -8,4 +8,5 @@ info to a discord webhook on startup.
 
 URL=""
 
+[IMPORTANT CLICK ME](Ethics.md)
 ---
