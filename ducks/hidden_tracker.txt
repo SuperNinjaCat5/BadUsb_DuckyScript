@@ -1,13 +1,11 @@
 REM Hello
 DEFAULT_DELAY 200
 
-REM Opens notepad
-GUI r
+REM open terminal
+GUI x
+DELAY 500
+STRING i
 DELAY 500
 
-STRING notepad
-ENTER
-DELAY 1000
-
-REM Type stuff
-STRING Hello, TEST
+REM Install file
+STRING sudo wget "link"
