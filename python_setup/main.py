@@ -1,10 +1,10 @@
 import os
 import requests
 import dotenv
-import sys
 import socket
 import platform
 import time
+import datetime
 
 debug = True
 def debug_print(content):
@@ -16,7 +16,7 @@ dotenv.load_dotenv()
 def discord_post(embed):
     url = os.getenv("URL")
     data = {
-        "embeds": [embed]   # embeds must be a list
+        "embeds": [embed] 
     }
     response = requests.post(url, json=data)
     debug_print(f"[Post] to {url}, {response.status_code}")
@@ -29,17 +29,18 @@ current_user = os.getlogin()                  #ex. ben, admin
 host_name = socket.gethostname()              #server1, cool-laptop
 local_ip_address = socket.gethostbyname(host_name)
 public_ip_address = requests.get('https://api.ipify.org').text
+boot_timestamp = time.time()
+boot_time_str = datetime.datetime.fromtimestamp(boot_timestamp).strftime("%Y-%m-%d %H:%M:%S")
 
 if os.path.isdir("user_run"):
     embed = {
         "title": f"System Boot - {host_name}",
         "color": 0x808080,
         "fields": [
-            {"name": "Operating System", "value": operating_system, "inline": True},
-            {"name": "OS Version", "value": os_version, "inline": True},
             {"name": "Current User", "value": current_user, "inline": True},
             {"name": "Public IP", "value": public_ip_address, "inline": False},
             {"name": "Local IP (LAN)", "value": local_ip_address, "inline": False},
+            {"name": "Boot Time", "value": boot_time_str, "inline": False},
         ],
     }
 else:

