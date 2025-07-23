@@ -24,5 +24,5 @@ If you install or run this on someone else’s machine **without their permissio
 
 **PLEASE** use it responsibly and ethically.
 
-[More info - Please read](Ethics.md)
+[More info - Please read](CODE_OF_CONDUCT.md)
 ---
